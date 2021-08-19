@@ -7,6 +7,7 @@ config=$2
 config_pwd=$3
 shift 3
 
+. ~/.nix-profile/etc/profile.d/nix.sh 
 
 command=(nix-instantiate --show-trace --expr '
   { system, configuration, hermetic ? false, ... }:

@@ -125,9 +125,20 @@ locals {
   build_on_target      = data.external.nixos-instantiate.result["currentSystem"] != var.target_system ? true : tobool(var.build_on_target)
 }
 
+# install nix in a chroot
+data "external" "nix-install" {
+  program = [
+    "${path.module}/nix-install.sh"
+    , "${path.module}/nix-user-chroot"
+    , "${path.module}/.nix"
+  ]
+}
+
 # used to detect changes in the configuration
 data "external" "nixos-instantiate" {
   program = concat([
+    data.external.nix-install.result["nix-user-chroot"],
+    data.external.nix-install.result["chroot-path"],
     "${path.module}/nixos-instantiate.sh",
     var.NIX_PATH == "" ? "-" : var.NIX_PATH,
     var.config != "" ? var.config : var.nixos_config,
