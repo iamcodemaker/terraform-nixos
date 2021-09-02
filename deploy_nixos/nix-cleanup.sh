@@ -4,12 +4,9 @@ set -euo pipefail
 # Args
 nix_user_chroot=$1
 chroot_path=$2
-first="$3"
-shift 3
+shift 2
 
 
-find "$chroot_path" "${first/#/\! -name }" "${@#/-a \! -name }"  -delete
-
-rm "$nix_user_chroot"
+"$nix_user_chroot" "$chroot_path" find "/nix" -type -l -delete
 
 echo '{}'
