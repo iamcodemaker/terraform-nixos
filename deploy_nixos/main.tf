@@ -153,6 +153,17 @@ data "external" "nixos-instantiate" {
   )
 }
 
+# cleanup the chroot
+data "external" "nix-cleanup" {
+  program = [
+    "${path.module}/nix-cleanup.sh"
+    , data.external.nix-install.result["nix-user-chroot"]
+    , data.external.nix-install.result["chroot-path"]
+    , data.external.nixos-instantiate.result["drv_path"]
+    , data.external.nixos-instantiate.result["out_path"]
+  ]
+}
+
 resource "null_resource" "deploy_nixos" {
   triggers = merge(var.triggers, local.triggers)
 
