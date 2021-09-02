@@ -143,6 +143,7 @@ data "external" "nixos-instantiate" {
     var.NIX_PATH == "" ? "-" : var.NIX_PATH,
     var.config != "" ? var.config : var.nixos_config,
     var.config_pwd == "" ? "." : var.config_pwd,
+    data.external.nix-install.result["chroot-path"],
     # end of positional arguments
     # start of pass-through arguments
     "--argstr", "system", var.target_system,
