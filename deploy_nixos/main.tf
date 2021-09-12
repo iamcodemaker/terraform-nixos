@@ -151,6 +151,18 @@ data "external" "nixos-instantiate" {
   )
 }
 
+# cleanup the chroot
+data "external" "nix-cleanup" {
+  program = [
+    "${path.module}/nix-cleanup.sh"
+    , data.external.nix-install.result["nix-portable"]
+  ]
+  depends_on = [
+    #null_resource.deploy_nixos
+    data.external.nixos-instantiate
+  ]
+}
+
 resource "null_resource" "deploy_nixos" {
   triggers = merge(var.triggers, local.triggers)
 
