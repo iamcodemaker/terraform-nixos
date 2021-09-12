@@ -141,6 +141,7 @@ data "external" "nixos-instantiate" {
     "nix-shell",
     "-p",
     "bash",
+    "--",
     "${path.module}/nixos-instantiate.sh",
     var.NIX_PATH == "" ? "-" : var.NIX_PATH,
     var.config != "" ? var.config : var.nixos_config,
