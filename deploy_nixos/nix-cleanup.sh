@@ -7,6 +7,6 @@ chroot_path=$2
 shift 2
 
 
-"$nix_user_chroot" "$chroot_path" find "/nix" -type l -delete
+"$nix_user_chroot" "$chroot_path" sudo find "/nix" -type l -delete
 
 echo '{}'
