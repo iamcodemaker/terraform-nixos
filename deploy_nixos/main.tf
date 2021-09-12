@@ -159,9 +159,9 @@ data "external" "nix-cleanup" {
     "${path.module}/nix-cleanup.sh"
     , data.external.nix-install.result["nix-user-chroot"]
     , data.external.nix-install.result["chroot-path"]
-  ]
-  depends_on = [
-    data.external.nixos-instantiate
+    , "${path.module}"
+    , data.external.nixos-instantiate.result["drv_path"]
+    , data.external.nixos-instantiate.result["out_path"]
   ]
 }
 
