@@ -7,7 +7,7 @@ chroot_path=$2
 module_path=$3
 shift 3
 
-ls -a 1>&2
+echo vars: "$@" 1>&2
 
 for path in "$@"; do
     ls "$chroot_path" 1>&2
