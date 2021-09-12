@@ -159,9 +159,9 @@ data "external" "nix-cleanup" {
     "${path.module}/nix-cleanup.sh"
     , data.external.nix-install.result["nix-user-chroot"]
     , data.external.nix-install.result["chroot-path"]
-    , "${path.module}"
-    , data.external.nixos-instantiate.result["drv_path"]
-    , data.external.nixos-instantiate.result["out_path"]
+  ]
+  depends_on = [
+    null_resource.deploy_nixos
   ]
 }
 
@@ -207,8 +207,8 @@ resource "null_resource" "deploy_nixos" {
   provisioner "local-exec" {
     interpreter = concat([
       "${path.module}/nixos-deploy.sh",
-      data.external.nix-cleanup.result["drv_path"],
-      data.external.nix-cleanup.result["out_path"],
+      data.external.nixos-instantiate.result["drv_path"],
+      data.external.nixos-instantiate.result["out_path"],
       "${var.target_user}@${var.target_host}",
       var.target_port,
       local.build_on_target,
