@@ -137,16 +137,11 @@ data "external" "nix-install" {
 # used to detect changes in the configuration
 data "external" "nixos-instantiate" {
   program = concat([
-    data.external.nix-install.result["nix-user-chroot"],
-    "nix-shell",
-    "-p",
-    "bash",
-    "--",
     "${path.module}/nixos-instantiate.sh",
     var.NIX_PATH == "" ? "-" : var.NIX_PATH,
     var.config != "" ? var.config : var.nixos_config,
     var.config_pwd == "" ? "." : var.config_pwd,
-    data.external.nix-install.result["chroot-path"],
+    data.external.nix-install.result["nix-portable"],
     # end of positional arguments
     # start of pass-through arguments
     "--argstr", "system", var.target_system,
