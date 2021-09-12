@@ -138,7 +138,9 @@ data "external" "nix-install" {
 data "external" "nixos-instantiate" {
   program = concat([
     data.external.nix-install.result["nix-user-chroot"],
-    data.external.nix-install.result["chroot-path"],
+    "nix-shell",
+    "-p",
+    "bash",
     "${path.module}/nixos-instantiate.sh",
     var.NIX_PATH == "" ? "-" : var.NIX_PATH,
     var.config != "" ? var.config : var.nixos_config,
@@ -151,19 +153,6 @@ data "external" "nixos-instantiate" {
     ],
     var.extra_eval_args,
   )
-}
-
-# cleanup the chroot
-data "external" "nix-cleanup" {
-  program = [
-    data.external.nix-install.result["nix-user-chroot"]
-    , data.external.nix-install.result["chroot-path"]
-    , "${path.module}/nix-cleanup.sh"
-  ]
-  depends_on = [
-    #null_resource.deploy_nixos
-    data.external.nixos-instantiate
-  ]
 }
 
 resource "null_resource" "deploy_nixos" {

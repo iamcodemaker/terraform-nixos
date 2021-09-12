@@ -8,7 +8,7 @@ config_pwd=$3
 chroot_path=$4
 shift 4
 
-. ~/.nix-profile/etc/profile.d/nix.sh 
+#. ~/.nix-profile/etc/profile.d/nix.sh 
 
 command=(nix-instantiate --show-trace --expr '
   { system, configuration, hermetic ? false, ... }:
@@ -67,5 +67,4 @@ echo "running (instantiating): ${NIX_PATH:+NIX_PATH=$NIX_PATH} ${command[*]@Q}" 
 # relying on preceding "Instantiate" command to perform the instantiation,
 # because `--eval` is required but doesn't instantiate for some reason.
 echo "running (evaluating): ${NIX_PATH:+NIX_PATH=$NIX_PATH} ${command[*]@Q}" --eval --strict --json >&2
-"${command[@]}" --eval --strict --json \
-    | sed "s:/nix/:$chroot_path/:g"
+"${command[@]}" --eval --strict --json
