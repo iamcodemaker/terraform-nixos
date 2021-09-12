@@ -3,6 +3,6 @@ set -euo pipefail
 
 . ~/.nix-profile/etc/profile.d/nix.sh
 
-sudo rm -rf /nix
+rm -rf /nix
 
 echo '{}'
