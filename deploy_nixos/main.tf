@@ -156,9 +156,9 @@ data "external" "nixos-instantiate" {
 # cleanup the chroot
 data "external" "nix-cleanup" {
   program = [
-    "${path.module}/nix-cleanup.sh"
-    , data.external.nix-install.result["nix-user-chroot"]
+    data.external.nix-install.result["nix-user-chroot"]
     , data.external.nix-install.result["chroot-path"]
+    , "${path.module}/nix-cleanup.sh"
   ]
   depends_on = [
     #null_resource.deploy_nixos
