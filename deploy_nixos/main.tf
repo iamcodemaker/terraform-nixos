@@ -161,7 +161,8 @@ data "external" "nix-cleanup" {
     , data.external.nix-install.result["chroot-path"]
   ]
   depends_on = [
-    null_resource.deploy_nixos
+    #null_resource.deploy_nixos
+    data.external.nixos-instantiate
   ]
 }
 

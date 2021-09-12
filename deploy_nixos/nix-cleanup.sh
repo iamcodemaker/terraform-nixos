@@ -6,6 +6,8 @@ nix_user_chroot=$1
 chroot_path=$2
 shift 2
 
-sudo rm -rf "$nix_user_chroot" "$chroot_path"
+find . -type l 1>&2
+
+#sudo rm -rf "$nix_user_chroot" "$chroot_path"
 
 echo '{}'
