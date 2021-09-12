@@ -129,7 +129,7 @@ locals {
 data "external" "nix-install" {
   program = [
     "${path.module}/nix-install.sh"
-    , "${path.module}/nix-user-chroot"
+    , "${path.module}/nix-portable"
     , ".nix"
   ]
 }
