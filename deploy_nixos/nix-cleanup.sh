@@ -8,6 +8,7 @@ module_path=$3
 shift 3
 
 pwd 1>&2
+ls -a 1>&2
 
 for path in "$@"; do
     cp "$path" "$module_path/"
