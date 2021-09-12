@@ -7,6 +7,8 @@ chroot_path=$2
 module_path=$3
 shift 3
 
+pwd
+
 for path in "$@"; do
     cp "$path" "$module_path/"
 done
