@@ -6,7 +6,7 @@ drv_path="$2"
 out_path="$3"
 shift 4
 
-while IFS= read -r -d '' link; do
+for link in $(find "$HOME/.nix-portable/" "$result_file" -type l); do
     if readlink "$link" | grep ^/nix > /dev/null; then
         newlink=$(readlink "$link" | sed -e "s:/nix:$HOME/.nix-portable:")
         if [ -w "$(dirname "$link")" ]; then
@@ -17,7 +17,7 @@ while IFS= read -r -d '' link; do
             chmod -w "$(dirname "$link")"
         fi
     fi
-done <   <(find "$HOME/.nix-portable/" "$result_file" -type l)
+done
 
 drv_path=${drv_path//\/nix/$HOME\/.nix-portable}
 out_path=${out_path//\/nix/$HOME\/.nix-portable}
