@@ -4,9 +4,9 @@ set -euo pipefail
 result_file="$1"
 drv_path="$2"
 out_path="$3"
-shift 4
+shift 3
 
-for link in $(find "$HOME/.nix-portable/" "$result_file" -type l); do
+while IFS= read -r -d '' link; do
     if readlink "$link" | grep ^/nix > /dev/null; then
         newlink=$(readlink "$link" | sed -e "s:/nix:$HOME/.nix-portable:")
         if [ -w "$(dirname "$link")" ]; then
@@ -17,7 +17,7 @@ for link in $(find "$HOME/.nix-portable/" "$result_file" -type l); do
             chmod -w "$(dirname "$link")"
         fi
     fi
-done
+done <   <(find "$HOME/.nix-portable/" "$result_file" -type l -print0)
 
 drv_path=${drv_path//\/nix/$HOME\/.nix-portable}
 out_path=${out_path//\/nix/$HOME\/.nix-portable}
