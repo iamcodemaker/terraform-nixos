@@ -202,6 +202,7 @@ resource "null_resource" "deploy_nixos" {
   provisioner "local-exec" {
     interpreter = concat([
       "${path.module}/nixos-deploy.sh",
+      data.external.nix-install.result["nix-portable"],
       data.external.nix-cleanup.result["drv_path"],
       data.external.nix-cleanup.result["out_path"],
       "${var.target_user}@${var.target_host}",

@@ -26,15 +26,16 @@ sshOpts=(
 
 ###  Argument parsing ###
 
-drvPath="$1"
-outPath="$2"
-targetHost="$3"
-targetPort="$4"
-buildOnTarget="$5"
-sshPrivateKey="$6"
-action="$7"
-deleteOlderThan="$8"
-shift 8
+nix_portable="$1"
+drvPath="$2"
+outPath="$3"
+targetHost="$4"
+targetPort="$5"
+buildOnTarget="$6"
+sshPrivateKey="$7"
+action="$8"
+deleteOlderThan="$9"
+shift 9
 
 # remove the last argument
 set -- "${@:1:$(($# - 1))}"
@@ -59,7 +60,7 @@ log() {
 }
 
 copyToTarget() {
-  NIX_SSHOPTS="${sshOpts[*]}" nix-copy-closure --to "$targetHost" "$@"
+  NIX_SSHOPTS="${sshOpts[*]}" "$nix_portable" nix-copy-closure --to "$targetHost" "$@"
 }
 
 # assumes that passwordless sudo is enabled on the server
@@ -112,7 +113,7 @@ else
 
   # Build derivation
   log "building on deployer"
-  outPath=$(nix-store --realize "$drvPath" "${buildArgs[@]}")
+  outPath=$("$nix_portable" nix-store --realize "$drvPath" "${buildArgs[@]}")
 
   # Upload build results
   log "uploading build results"
