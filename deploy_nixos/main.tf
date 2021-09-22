@@ -155,12 +155,10 @@ data "external" "nixos-instantiate" {
 data "external" "nix-cleanup" {
   program = [
     "${path.module}/nix-cleanup.sh"
-    ,"${path.module}/result"
+    , "${path.module}/result"
+    , data.external.nixos-instantiate.result["drv_path"]
+    , data.external.nixos-instantiate.result["out_path"]
     #, data.external.nix-install.result["nix-portable"]
-  ]
-  depends_on = [
-    #null_resource.deploy_nixos
-    data.external.nixos-instantiate
   ]
 }
 
@@ -206,8 +204,8 @@ resource "null_resource" "deploy_nixos" {
   provisioner "local-exec" {
     interpreter = concat([
       "${path.module}/nixos-deploy.sh",
-      data.external.nixos-instantiate.result["drv_path"],
-      data.external.nixos-instantiate.result["out_path"],
+      data.external.nix-cleanup.result["drv_path"],
+      data.external.nix-cleanup;;.result["out_path"],
       "${var.target_user}@${var.target_host}",
       var.target_port,
       local.build_on_target,
@@ -219,11 +217,6 @@ resource "null_resource" "deploy_nixos" {
     )
     command = "ignoreme"
   }
-
-  depends_on = [
-    #null_resource.deploy_nixos
-    data.external.nix-cleanup
-  ]
 }
 
 # --------------------------------------------------------------------------
