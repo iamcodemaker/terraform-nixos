@@ -18,18 +18,19 @@ while IFS= read -r -d '' link; do
             chmod -w "$(dirname "$link")"
         fi
     fi
-done <   <(find "$HOME/.nix-portable/" "$result_file" -type l -print0)
+done <   <(find "$HOME/.nix-portable/" ./result -type l -print0)
 
 
-cp "${drv_path//\/nix/$HOME\/.nix-portable}" "$path_module"/
-drv_path="$path_module/$(basename "$drv_path")"
+#cp "${drv_path//\/nix/$HOME\/.nix-portable}" "$path_module"/
+#drv_path="$path_module/$(basename "$drv_path")"
+drv_path=${drv_path//\/nix/$HOME\/.nix-portable}
 out_path=${out_path//\/nix/$HOME\/.nix-portable}
 
-chmod -R +w "$HOME/.nix-portable"
-rm -rf "$HOME/.nix-portable"
-rm -f "$result_file"
+#chmod -R +w "$HOME/.nix-portable"
+#rm -rf "$HOME/.nix-portable"
+#rm -f "$result_file"
 
-find . -type l 1>&2
-exit 1
+#find . -type l 1>&2
+#exit 1
 
 echo "{\"drv_path\":\"$drv_path\",\"out_path\":\"$out_path\"}"
