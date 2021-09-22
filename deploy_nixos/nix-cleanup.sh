@@ -29,4 +29,7 @@ chmod -R +w "$HOME/.nix-portable"
 rm -rf "$HOME/.nix-portable"
 rm -f "$result_file"
 
+find . -type l 1>&2
+exit 1
+
 echo "{\"drv_path\":\"$drv_path\",\"out_path\":\"$out_path\"}"
