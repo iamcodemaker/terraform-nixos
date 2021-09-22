@@ -1,10 +1,9 @@
 #! /usr/bin/env bash
 set -euo pipefail
 
-chroot_dir="$1"
-result_file="$2"
-drv_path="$3"
-out_path="$4"
+result_file="$1"
+drv_path="$2"
+out_path="$3"
 shift 4
 
 while IFS= read -r -d '' link; do
