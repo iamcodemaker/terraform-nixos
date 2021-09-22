@@ -219,6 +219,11 @@ resource "null_resource" "deploy_nixos" {
     )
     command = "ignoreme"
   }
+
+  depends_on = [
+    #null_resource.deploy_nixos
+    data.external.nix-cleanup
+  ]
 }
 
 # --------------------------------------------------------------------------
