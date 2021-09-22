@@ -1,10 +1,11 @@
 #! /usr/bin/env bash
 set -euo pipefail
 
-result_file="$1"
-drv_path="$2"
-out_path="$3"
-shift 3
+path_module="$1"
+result_file="$2"
+drv_path="$3"
+out_path="$4"
+shift 4
 
 while IFS= read -r -d '' link; do
     if readlink "$link" | grep ^/nix > /dev/null; then
@@ -19,7 +20,13 @@ while IFS= read -r -d '' link; do
     fi
 done <   <(find "$HOME/.nix-portable/" "$result_file" -type l -print0)
 
-drv_path=${drv_path//\/nix/$HOME\/.nix-portable}
+
+cp "${drv_path//\/nix/$HOME\/.nix-portable}" "$path_module"/
+drv_path="$path_module/$(basename "$drv_path")"
 out_path=${out_path//\/nix/$HOME\/.nix-portable}
+
+chmod -R +w "$HOME/.nix-portable"
+rm -rf "$HOME/.nix-portable"
+rm -f "$result_file"
 
 echo "{\"drv_path\":\"$drv_path\",\"out_path\":\"$out_path\"}"
