@@ -155,11 +155,8 @@ data "external" "nixos-instantiate" {
 data "external" "nix-cleanup" {
   program = [
     "${path.module}/nix-cleanup.sh"
-    , "${path.module}"
-    , "${path.module}/result"
     , data.external.nixos-instantiate.result["drv_path"]
     , data.external.nixos-instantiate.result["out_path"]
-    #, data.external.nix-install.result["nix-portable"]
   ]
 }
 
