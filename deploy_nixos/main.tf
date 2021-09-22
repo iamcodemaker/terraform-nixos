@@ -155,7 +155,8 @@ data "external" "nixos-instantiate" {
 data "external" "nix-cleanup" {
   program = [
     "${path.module}/nix-cleanup.sh"
-    , data.external.nix-install.result["nix-portable"]
+    ,"${path.module}/result"
+    #, data.external.nix-install.result["nix-portable"]
   ]
   depends_on = [
     #null_resource.deploy_nixos
