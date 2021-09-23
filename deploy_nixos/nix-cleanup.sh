@@ -1,10 +1,12 @@
 #! /usr/bin/env bash
 set -euo pipefail
 
-export NP_LOCATOIN="$1"
+NP_LOCATION="$(realpath "$1")"
 drv_path="$2"
 out_path="$3"
 shift 3
+
+export NP_LOCATOIN
 
 while IFS= read -r -d '' link; do
     if readlink "$link" | grep ^/nix > /dev/null; then

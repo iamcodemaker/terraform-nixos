@@ -27,7 +27,7 @@ sshOpts=(
 ###  Argument parsing ###
 
 nix_portable="$1"
-export NP_LOCATION="$2"
+NP_LOCATION="$(realpath "$2")"
 drvPath="$3"
 outPath="$4"
 targetHost="$5"
@@ -37,6 +37,8 @@ sshPrivateKey="$8"
 action="$9"
 deleteOlderThan="${10}"
 shift 10
+
+export NP_LOCATION
 
 # remove the last argument
 set -- "${@:1:$(($# - 1))}"

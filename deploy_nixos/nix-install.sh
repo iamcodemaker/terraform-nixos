@@ -3,8 +3,10 @@ set -euo pipefail
 
 # Args
 nix_portable=$1
-export NP_LOCATION="$2"
+NP_LOCATION="$(realpath "$2")"
 shift 2
+
+export NP_LOCATION
 
 
 echo "downloading nix-portable" >&2

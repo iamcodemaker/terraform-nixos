@@ -6,8 +6,10 @@ nix_path=$1
 config=$2
 config_pwd=$3
 nix_portable=$4
-export NP_LOCATION=$5
+NP_LOCATION="$(realpath "$5")"
 shift 5
+
+export NP_LOCATION
 
 #. ~/.nix-profile/etc/profile.d/nix.sh 
 
