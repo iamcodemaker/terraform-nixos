@@ -108,15 +108,14 @@ fixupLinks() {
             fi
         fi
     done <   <(find "$HOME/.nix-portable/" ./result -type l -print0)
-
-    drvPath=${drvPath//$HOME\/.nix-portable/\/nix}
-    outPath=${outPath//$HOME\/.nix-portable/\/nix}
-
 }
 
 ### Main ###
 
 fixupLinks
+
+drvPath=${drvPath//$HOME\/.nix-portable/\/nix}
+outPath=${outPath//$HOME\/.nix-portable/\/nix}
 
 setupControlPath
 
