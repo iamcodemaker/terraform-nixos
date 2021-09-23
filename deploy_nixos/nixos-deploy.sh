@@ -94,7 +94,29 @@ setupControlPath() {
   trap cleanupControlPath EXIT
 }
 
+# Fixup nix symlinks
+fixupLinks() {
+    while IFS= read -r -d '' link; do
+        if readlink "$link" | grep ^"$HOME"/.nix-portable > /dev/null; then
+            newlink=$(readlink "$link" | sed -e "s:$HOME/.nix-portable:/nix:")
+            if [ -w "$(dirname "$link")" ]; then
+                ln -sf "$newlink" "$link"
+            else
+                chmod +w "$(dirname "$link")"
+                ln -sf "$newlink" "$link"
+                chmod -w "$(dirname "$link")"
+            fi
+        fi
+    done <   <(find "$HOME/.nix-portable/" ./result -type l -print0)
+
+    drvPath=${drvPath//$HOME\/.nix-portable/\/nix}
+    outPath=${outPath//$HOME\/.nix-portable/\/nix}
+
+}
+
 ### Main ###
+
+fixupLinks
 
 setupControlPath
 
