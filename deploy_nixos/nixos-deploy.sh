@@ -27,15 +27,16 @@ sshOpts=(
 ###  Argument parsing ###
 
 nix_portable="$1"
-drvPath="$2"
-outPath="$3"
-targetHost="$4"
-targetPort="$5"
-buildOnTarget="$6"
-sshPrivateKey="$7"
-action="$8"
-deleteOlderThan="$9"
-shift 9
+export NP_LOCATION="$2"
+drvPath="$3"
+outPath="$4"
+targetHost="$5"
+targetPort="$6"
+buildOnTarget="$7"
+sshPrivateKey="$8"
+action="$9"
+deleteOlderThan="${10}"
+shift 10
 
 # remove the last argument
 set -- "${@:1:$(($# - 1))}"
@@ -97,8 +98,8 @@ setupControlPath() {
 # Fixup nix symlinks
 fixupLinks() {
     while IFS= read -r -d '' link; do
-        if readlink "$link" | grep ^"$HOME"/.nix-portable > /dev/null; then
-            newlink=$(readlink "$link" | sed -e "s:$HOME/.nix-portable:/nix:")
+        if readlink "$link" | grep ^"$NP_LOCATION"/.nix-portable > /dev/null; then
+            newlink=$(readlink "$link" | sed -e "s:$NP_LOCATION/.nix-portable:/nix:")
             if [ -w "$(dirname "$link")" ]; then
                 ln -sf "$newlink" "$link"
             else
@@ -107,15 +108,15 @@ fixupLinks() {
                 chmod -w "$(dirname "$link")"
             fi
         fi
-    done <   <(find "$HOME/.nix-portable/" ./result -type l -print0)
+    done <   <(find "$NP_LOCATION/.nix-portable/" ./result -type l -print0)
 }
 
 ### Main ###
 
 fixupLinks
 
-drvPath=${drvPath//$HOME\/.nix-portable/\/nix}
-outPath=${outPath//$HOME\/.nix-portable/\/nix}
+#drvPath=${drvPath//$NP_LOCATION\/.nix-portable/\/nix}
+#outPath=${outPath//$NP_LOCATION\/.nix-portable/\/nix}
 
 setupControlPath
 

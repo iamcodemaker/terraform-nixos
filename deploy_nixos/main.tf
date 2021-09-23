@@ -130,7 +130,7 @@ data "external" "nix-install" {
   program = [
     "${path.module}/nix-install.sh"
     , "${path.module}/nix-portable"
-    , ".nix"
+    , "${path.module}"
   ]
 }
 
@@ -142,6 +142,7 @@ data "external" "nixos-instantiate" {
     var.config != "" ? var.config : var.nixos_config,
     var.config_pwd == "" ? "." : var.config_pwd,
     data.external.nix-install.result["nix-portable"],
+    data.external.nix-install.result["np-location"],
     # end of positional arguments
     # start of pass-through arguments
     "--argstr", "system", var.target_system,
@@ -203,6 +204,7 @@ resource "null_resource" "deploy_nixos" {
     interpreter = concat([
       "${path.module}/nixos-deploy.sh",
       data.external.nix-install.result["nix-portable"],
+      data.external.nix-install.result["np-location"],
       data.external.nix-cleanup.result["drv_path"],
       data.external.nix-cleanup.result["out_path"],
       "${var.target_user}@${var.target_host}",

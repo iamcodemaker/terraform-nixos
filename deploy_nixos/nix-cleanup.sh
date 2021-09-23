@@ -1,13 +1,14 @@
 #! /usr/bin/env bash
 set -euo pipefail
 
-drv_path="$1"
-out_path="$2"
-shift 2
+export NP_LOCATOIN="$1"
+drv_path="$2"
+out_path="$3"
+shift 3
 
 while IFS= read -r -d '' link; do
     if readlink "$link" | grep ^/nix > /dev/null; then
-        newlink=$(readlink "$link" | sed -e "s:/nix:$HOME/.nix-portable:")
+        newlink=$(readlink "$link" | sed -e "s:/nix:$NP_LOCATION/.nix-portable:")
         if [ -w "$(dirname "$link")" ]; then
             ln -sf "$newlink" "$link"
         else
@@ -16,9 +17,9 @@ while IFS= read -r -d '' link; do
             chmod -w "$(dirname "$link")"
         fi
     fi
-done <   <(find "$HOME/.nix-portable/" ./result -type l -print0)
+done <   <(find "$NP_LOCATION/.nix-portable/" ./result -type l -print0)
 
-drv_path=${drv_path//\/nix/$HOME\/.nix-portable}
-out_path=${out_path//\/nix/$HOME\/.nix-portable}
+#drv_path=${drv_path//\/nix/$NP_LOCATION\/.nix-portable}
+#out_path=${out_path//\/nix/$NP_LOCATION\/.nix-portable}
 
 echo "{\"drv_path\":\"$drv_path\",\"out_path\":\"$out_path\"}"
